@@ -1,0 +1,44 @@
+[
+    {
+        "kode": 1,
+        "nama": "A-25100-KGIA-B09-001",
+        "warna": "#FAFF1B",
+        "batas_jam": 400,
+        "terpakai": 0
+    },
+    {
+        "kode": 2,
+        "nama": "A-25100-KGIA-B12-002",
+        "warna": "#8ED572",
+        "batas_jam": 10,
+        "terpakai": 0
+    },
+    {
+        "kode": 3,
+        "nama": "A-25100-KGIA-B14-001",
+        "warna": "#29B3F0",
+        "batas_jam": 500,
+        "terpakai": 0
+    },
+    {
+        "kode": 4,
+        "nama": "A-25100-KGIA-B14-003",
+        "warna": "#C9C9C9",
+        "batas_jam": 80,
+        "terpakai": 0
+    },
+    {
+        "kode": 5,
+        "nama": "B-25100-KGIC-B05-001",
+        "warna": "#F7E0A9",
+        "batas_jam": 90,
+        "terpakai": 0
+    },
+    {
+        "kode": 6,
+        "nama": "B-25100-KGIE-B01-001",
+        "warna": "#C2611C",
+        "batas_jam": 100,
+        "terpakai": 0
+    }
+]
