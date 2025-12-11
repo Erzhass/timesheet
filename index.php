@@ -11,18 +11,19 @@ if(isset($_SESSION['user'])) header('Location: dashboard.php');
 <!-- FONT -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 /* ====== GLOBAL ====== */
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #2d3748;
 }
 
 /* ====== LOGIN CONTAINER ====== */
@@ -36,33 +37,31 @@ body {
 
 /* ====== LOGIN BOX ====== */
 .login-box {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: #ffffff;
     width: 100%;
-    max-width: 400px;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 420px;
+    padding: 50px 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e2e8f0;
+    transition: box-shadow 0.3s ease;
 }
 
 .login-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .login-box h2 {
-    margin: 0;
-    font-size: 28px;
-    color: #2d3748;
+    margin: 0 0 8px 0;
+    font-size: 32px;
+    color: #1a202c;
     font-weight: 700;
     letter-spacing: -0.5px;
 }
 
 .subtitle {
-    margin-top: 8px;
+    margin: 0 0 32px 0;
     font-size: 16px;
     color: #718096;
     font-weight: 400;
@@ -75,24 +74,25 @@ label {
     margin-top: 24px;
     font-size: 14px;
     color: #4a5568;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .input {
     width: 100%;
     margin-top: 8px;
-    padding: 14px 16px;
+    padding: 16px 18px;
     font-size: 16px;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
     outline: none;
-    transition: all 0.3s ease;
-    background: #f7fafc;
+    transition: all 0.2s ease;
+    background: #f9fafb;
+    color: #1a202c;
 }
 
 .input:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #4c51bf;
+    box-shadow: 0 0 0 3px rgba(76, 81, 191, 0.1);
     background: #ffffff;
 }
 
@@ -100,22 +100,22 @@ label {
 .btn-login {
     width: 100%;
     margin-top: 32px;
-    padding: 14px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 16px;
+    background: #4c51bf;
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(76, 81, 191, 0.3);
 }
 
 .btn-login:hover {
-    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    background: #434190;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(76, 81, 191, 0.4);
 }
 
 .btn-login:active {
@@ -125,11 +125,11 @@ label {
 /* Responsive adjustments */
 @media (max-width: 480px) {
     .login-box {
-        padding: 30px 20px;
+        padding: 40px 30px;
         max-width: 90%;
     }
     .login-box h2 {
-        font-size: 24px;
+        font-size: 28px;
     }
 }
 </style>
