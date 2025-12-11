@@ -232,7 +232,7 @@ body{
 
     <div class="welcome-card">
         <div class="photo-box">
-             <img src="foto.jpg" alt="Foto" class="photo">
+             <img src="gambar.jpg" alt="Foto" class="photo">
         </div>
 
         <h3 class="thanks-text">

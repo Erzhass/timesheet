@@ -14,11 +14,57 @@ if(!isset($_SESSION['user'])) header('Location: index.php');
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ================= CSS VARIABLES FOR THEMES ================= */
+:root {
+    --bg-color: #000000; /* Dark background */
+    --sidebar-bg: #1a1a1a; /* Dark sidebar */
+    --text-color: #FFD700; /* Gold text */
+    --nav-bg: #333333; /* Dark nav */
+    --nav-hover-bg: #FFD700; /* Gold hover */
+    --nav-hover-text: #000000; /* Black text on hover */
+    --logout-bg: #FFD700; /* Gold logout */
+    --logout-text: #000000; /* Black text */
+    --card-bg: #1a1a1a; /* Dark card */
+    --card-border: #FFD700; /* Gold border */
+    --form-bg: #1a1a1a; /* Dark form */
+    --input-bg: #333333; /* Dark input */
+    --input-border: #FFD700; /* Gold border */
+    --btn-bg: #FFD700; /* Gold button */
+    --btn-text: #000000; /* Black text */
+    --btn-hover: #D4AF37; /* Darker gold */
+    --shadow: rgba(255,215,0,0.3); /* Gold shadow */
+    --header-color: #FFD700; /* Gold header */
+}
+
+/* Light mode overrides */
+body.light-mode {
+    --bg-color: #f8f9fa; /* Light gray background */
+    --sidebar-bg: #ffffff; /* White sidebar */
+    --text-color: #1e3a8a; /* Dark blue text */
+    --nav-bg: #e9ecef; /* Light gray nav */
+    --nav-hover-bg: #1e40af; /* Blue hover */
+    --nav-hover-text: #ffffff; /* White text on hover */
+    --logout-bg: #e63946; /* Red logout */
+    --logout-text: #ffffff; /* White text */
+    --card-bg: #ffffff; /* White card */
+    --card-border: #1e40af; /* Blue border */
+    --form-bg: #ffffff; /* White form */
+    --input-bg: #ffffff; /* White input */
+    --input-border: #ccc; /* Gray border */
+    --btn-bg: #1e40af; /* Blue button */
+    --btn-text: #ffffff; /* White text */
+    --btn-hover: #15348c; /* Darker blue */
+    --shadow: rgba(0,0,0,0.08); /* Subtle shadow */
+    --header-color: #1e3a8a; /* Blue header */
+}
+
 /* ================= GLOBAL ================= */
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: #eef3fa;
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
 }
 
 /* ================= SIDEBAR ================= */
@@ -28,83 +74,113 @@ body {
     top: 0;
     width: 240px;
     height: 100vh;
-    background: #1e40af;
-    color: white;
+    background: var(--sidebar-bg);
+    color: var(--text-color);
     padding: 20px;
+    border-right: 2px solid var(--card-border);
+    transition: background 0.3s, color 0.3s;
 }
 
 #sidebar h2 {
     font-size: 20px;
     line-height: 24px;
     margin-bottom: 25px;
+    color: var(--text-color);
 }
 
 #sidebar a {
     display: block;
     padding: 10px 14px;
-    background: rgba(255,255,255,0.12);
+    background: var(--nav-bg);
     margin-bottom: 8px;
     border-radius: 6px;
     text-decoration: none;
-    color: white;
+    color: var(--text-color);
     transition: 0.2s;
+    border: 1px solid var(--card-border);
 }
 
 #sidebar a:hover {
-    background: rgba(255,255,255,0.22);
+    background: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
 }
 
 .logout {
-    background: #e63946 !important;
+    background: var(--logout-bg) !important;
+    color: var(--logout-text) !important;
 }
 
 /* ================= CONTENT ================= */
 #content {
     margin-left: 260px;
     padding: 30px;
+    background: var(--bg-color);
+    transition: background 0.3s;
 }
 
 #content h1 {
     margin-top: 0;
-    color: #1e3a8a;
+    color: var(--header-color);
 }
 
 /* ================= FORM CARD ================= */
 #frm {
-    background: white;
+    background: var(--form-bg);
     padding: 20px;
     border-radius: 12px;
     width: fit-content;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 10px var(--shadow);
     margin-bottom: 25px;
+    border: 2px solid var(--card-border);
+    transition: background 0.3s, box-shadow 0.3s;
 }
 
 #frm input {
     padding: 8px 10px;
     margin-right: 10px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .button {
-    background: #1e40af;
-    color: white;
+    background: var(--btn-bg);
+    color: var(--btn-text);
     border: none;
     padding: 10px 16px;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+    transition: background 0.3s;
 }
 
 .button:hover {
-    background: #15348c;
+    background: var(--btn-hover);
+}
+
+/* Toggle button */
+.theme-toggle{
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    padding:10px 18px;
+    border-radius:8px;
+    border: 2px solid var(--btn-bg);
+    font-weight:600;
+    cursor:pointer;
+    margin-left:10px;
+    transition: background 0.3s;
+}
+.theme-toggle:hover{
+    background: var(--btn-hover);
 }
 
 /* ================= GROUP HEADER ================= */
 .month-header {
     margin-top: 25px;
     font-size: 20px;
-    color: #1e3a8a;
+    color: var(--header-color);
     font-weight: 700;
 }
 
@@ -117,12 +193,12 @@ body {
 }
 
 .ts-card {
-    background: white;
+    background: var(--card-bg);
     border-radius: 12px;
     padding: 16px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-    border-left: 8px solid #1e40af;
-    transition: 0.2s;
+    box-shadow: 0 3px 10px var(--shadow);
+    border-left: 8px solid var(--card-border);
+    transition: 0.2s, background 0.3s, box-shadow 0.3s;
 }
 
 .ts-card:hover {
@@ -158,7 +234,10 @@ body {
 
 <!-- CONTENT -->
 <div id="content">
-  <h1>Timesheet</h1>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h1>Timesheet</h1>
+    <button class="theme-toggle" id="theme-toggle">Toggle Mode</button>
+  </div>
 
   <!-- FORM TAMBAH -->
   <form id="frm">
@@ -173,6 +252,37 @@ body {
 </div>
 
 <script>
+// JavaScript for theme toggle
+const toggleButton = document.getElementById('theme-toggle');
+const body = document.body;
+
+// Load saved theme from localStorage
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+    body.classList.add(savedTheme);
+    updateButtonText();
+}
+
+// Toggle theme on button click
+toggleButton.addEventListener('click', () => {
+    body.classList.toggle('light-mode');
+    const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : '';
+    localStorage.setItem('theme', currentTheme);
+    updateButtonText();
+});
+
+// Update button text based on current theme
+function updateButtonText() {
+    if (body.classList.contains('light-mode')) {
+        toggleButton.textContent = 'Dark Mode';
+    } else {
+        toggleButton.textContent = 'Light Mode';
+    }
+}
+
+// Initial button text
+updateButtonText();
+
 let woData = [];
 
 async function loadLookup(){
@@ -222,7 +332,7 @@ async function load(){
     });
   }
 }
-    </script>
+</script>
 
 </body>
 </html>
