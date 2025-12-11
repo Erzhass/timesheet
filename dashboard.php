@@ -15,8 +15,9 @@ if(!isset($_SESSION['user'])) header('Location: index.php');
 /* ================= GLOBAL ================= */
 body{
     margin:0;
-    background:#eef3fa;
+    background:#000000; /* Changed to black */
     font-family:'Inter',sans-serif;
+    color:#FFD700; /* Gold text for contrast */
 }
 
 /* ================= SIDEBAR ================= */
@@ -26,9 +27,10 @@ body{
     left:0;
     width:240px;
     height:100vh;
-    background:#1e40af;
+    background:#1a1a1a; /* Dark black */
     padding:20px;
-    color:white;
+    color:#FFD700; /* Gold text */
+    border-right: 2px solid #FFD700; /* Gold accent */
 }
 
 .logo{
@@ -36,21 +38,24 @@ body{
     margin-bottom:25px;
     font-weight:700;
     line-height:1.3;
+    color:#FFD700; /* Gold */
 }
 
 .nav-item{
     display:block;
     padding:10px 14px;
     border-radius:6px;
-    background:rgba(255,255,255,0.10);
+    background:#333333; /* Dark gray */
     margin-bottom:10px;
-    color:white;
+    color:#FFD700; /* Gold */
     text-decoration:none;
     transition:0.2s;
+    border: 1px solid #FFD700; /* Gold border */
 }
 
 .nav-item:hover{
-    background:rgba(255,255,255,0.20);
+    background:#FFD700; /* Gold on hover */
+    color:#000000; /* Black text on hover */
 }
 
 .logout-btn{
@@ -58,15 +63,17 @@ body{
     padding:10px 14px;
     border-radius:6px;
     margin-top:20px;
-    background:#e63946;
-    color:white;
+    background:#FFD700; /* Gold */
+    color:#000000; /* Black text */
     text-decoration:none;
+    border: 1px solid #FFD700;
 }
 
 /* ================= CONTENT ================= */
 .content{
     margin-left:260px;
     padding:30px;
+    background:#000000; /* Black */
 }
 
 .header{
@@ -78,51 +85,52 @@ body{
 
 .header h1{
     margin:0;
-    color:#1e3a8a;
+    color:#FFD700; /* Gold */
     font-size:28px;
 }
 
 .btn-export{
-    background:#1e40af;
-    color:white;
+    background:#FFD700; /* Gold */
+    color:#000000; /* Black text */
     padding:10px 18px;
     border-radius:8px;
-    border:none;
+    border: 2px solid #FFD700;
     font-weight:600;
     cursor:pointer;
 }
 .btn-export:hover{
-    background:#15348c;
+    background:#D4AF37; /* Darker gold */
 }
 
 /* ================= CARD FOTO ================= */
 .welcome-card{
-    background:white;
+    background:#1a1a1a; /* Dark black */
     border-radius:12px;
     padding:25px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    box-shadow:0 4px 12px rgba(255,215,0,0.3); /* Gold shadow */
     max-width:500px;
     text-align:center;
+    border: 2px solid #FFD700; /* Gold border */
 }
 
 .photo-box{
     width:200px;
     height:200px;
     margin:auto;
-    background:white;
+    background:#000000; /* Black */
     border-radius:12px;
     display:flex;
     justify-content:center;
     align-items:center;
     font-weight:600;
-    color:#1e3a8a;
-    border:3px solid #1e40af;
+    color:#FFD700; /* Gold */
+    border:3px solid #FFD700; /* Gold border */
     margin-bottom:20px;
 }
 
 .thanks-text{
     font-weight:600;
-    color:#1e3a8a;
+    color:#FFD700; /* Gold */
     line-height:1.4;
 }
 </style>
