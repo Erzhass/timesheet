@@ -42,7 +42,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="batik" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="%23000000"/><circle cx="25" cy="25" r="8" fill="%23FFD700" opacity="0.3"/><path d="M10 10 L40 10 L40 40 L10 40 Z" fill="none" stroke="%23FFD700" stroke-width="1" opacity="0.4"/><path d="M15 15 L35 15 M25 5 L25 45" stroke="%23FFD700" stroke-width="0.5" opacity="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(%23batik)"/></svg>');
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="batik" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="%23000000"/><g fill="%23FFD700" opacity="0.4"><path d="M50 20 Q60 10 70 20 Q80 30 70 40 Q60 50 50 40 Q40 30 50 20 Z"/><path d="M20 50 Q10 60 20 70 Q30 80 40 70 Q50 60 40 50 Q30 40 20 50 Z"/><path d="M80 50 Q90 60 80 70 Q70 80 60 70 Q50 60 60 50 Q70 40 80 50 Z"/><path d="M50 80 Q60 90 70 80 Q80 70 70 60 Q60 50 50 60 Q40 70 50 80 Z"/><circle cx="50" cy="50" r="3" fill="%23FFD700" opacity="0.6"/><path d="M25 25 L75 25 M25 75 L75 75 M50 0 L50 100" stroke="%23FFD700" stroke-width="0.5" opacity="0.3"/></g></pattern></defs><rect width="100%" height="100%" fill="url(%23batik)"/></svg>');
     pointer-events: none;
     opacity: 0.8;
 }
