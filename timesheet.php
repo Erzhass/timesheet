@@ -286,4 +286,133 @@ if (savedTheme) {
 
 // Toggle theme on button click
 toggleButton.addEventListener('click', () => {
-    body.classList.toggle('
+    body.classList.toggle('light-mode');
+    const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : '';
+    localStorage.setItem('theme', currentTheme);
+    updateButtonText();
+});
+
+// Update button text based on current theme
+function updateButtonText() {
+    if (body.classList.contains('light-mode')) {
+        toggleButton.textContent = 'Dark Mode';
+    } else {
+        toggleButton.textContent = 'Light Mode';
+    }
+}
+
+// Initial button text
+updateButtonText();
+
+let woData = [];
+
+async function loadLookup(){
+  woData = await fetch("db/tasks.json").then(r=>r.json());
+}
+
+function getWarna(kode){
+  const f = woData.find(a => a.kode == kode);
+  return f ? f.warna : "#1e40af";
+}
+
+async function load(){
+  await loadLookup();
+  const data = await fetch('db/timesheet.json').then(r=>r.json());
+
+  const groups = {};
+  data.forEach(i=>{
+    const d = new Date(i.tanggal);
+    const key = d.getFullYear()+'-'+(d.getMonth()+1);
+    groups[key] = groups[key] || [];
+    groups[key].push(i);
+  });
+
+  const container = document.getElementById('groups');
+  container.innerHTML='';
+
+  for(const k in groups){
+    const parts = k.split('-'); 
+    const y = parts[0], m = parts[1];
+
+    container.innerHTML += `<h3 class="month-header">${m}/${y}</h3>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'ts-grid';
+
+    groups[k].forEach(it=>{
+      const warna = getWarna(it.kode);
+
+      const card = document.createElement('div'); 
+      card.className = 'ts-card';
+      card.style.borderLeft = `6px solid ${warna}`;
+
+      card.innerHTML = `
+        <div class="ts-color" style="background:${warna}"></div>
+        <div class="ts-title">${it.tanggal}</div>
+        Kode: ${it.kode} | Jam: ${it.jam}<br>
+        ${it.kegiatan}
+      `;
+
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
+  }
+}
+
+// Handle form submit for preview
+document.getElementById('frm').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+
+  const previewArea = document.getElementById('preview-area');
+  previewArea.innerHTML = '';
+
+  const previewDiv = document.createElement('div');
+  previewDiv.className = 'preview-card';
+  previewDiv.innerHTML = `
+    <h4>Preview Entry:</h4>
+    <strong>Tanggal:</strong> ${f.get('tanggal')}<br>
+    <strong>Kode:</strong> ${f.get('kode')}<br>
+    <strong>Jam:</strong> ${f.get('jam')}<br>
+    <strong>Kegiatan:</strong> ${f.get('kegiatan')}<br>
+    <button id="confirm-btn" class="button">Konfirmasi Tambah</button>
+    <button id="cancel-btn" class="button" style="background: var(--logout-bg); color: var(--logout-text);">Batal</button>
+  `;
+
+  previewArea.appendChild(previewDiv);
+
+  document.getElementById('confirm-btn').addEventListener('click', async () => {
+    // Send to API
+    const body = {
+      action: 'add',
+      tanggal: f.get('tanggal'),
+      kode: f.get('kode'),
+      jam: parseInt(f.get('jam')),
+      kegiatan: f.get('kegiatan')
+    };
+
+    await fetch('api/timesheet.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    // Reload history
+    load();
+    // Clear preview
+    previewArea.innerHTML = '';
+    // Reset form
+    e.target.reset();
+  });
+
+  document.getElementById('cancel-btn').addEventListener('click', () => {
+    previewArea.innerHTML = '';
+  });
+});
+
+load();
+</script>
+
+</body>
+</html>
