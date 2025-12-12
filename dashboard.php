@@ -208,7 +208,6 @@ body{
     <a class="nav-item" href="dashboard.php">Dashboard</a>
     <a class="nav-item" href="workorder.php">Work Order</a>
     <a class="nav-item" href="timesheet.php">Timesheet</a>
-    <a class="nav-item" href="assets.php">Assets</a>
 
     <?php if($_SESSION['role']==='admin'){ ?>
         <a class="nav-item" href="add_user.php">Tambah User</a>
@@ -236,8 +235,8 @@ body{
         </div>
 
         <h3 class="thanks-text">
-            Terima kasih kepada MAS IFFAN<br>
-            Pembimbing Magang saya di PAL
+            Terima Kasih Kepada Mas Iffan<br>
+            Pembimbing Magang IT HARKAN
         </h3>
     </div>
 
