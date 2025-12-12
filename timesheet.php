@@ -176,6 +176,22 @@ body {
     background: var(--btn-hover);
 }
 
+/* ================= PREVIEW CARD ================= */
+.preview-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 3px 10px var(--shadow);
+    margin-bottom: 25px;
+    border: 2px solid var(--card-border);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.preview-card h4 {
+    margin: 0 0 10px 0;
+    color: var(--text-color);
+}
+
 /* ================= GROUP HEADER ================= */
 .month-header {
     margin-top: 25px;
@@ -215,6 +231,7 @@ body {
 .ts-title {
     font-weight: 700;
     margin-bottom: 4px;
+    color: var(--text-color);
 }
 </style>
 </head>
@@ -248,6 +265,10 @@ body {
     <button type="submit" class="button">Tambah</button>
   </form>
 
+  <!-- PREVIEW AREA -->
+  <div id="preview-area"></div>
+
+  <!-- HISTORY -->
   <div id="groups"></div>
 </div>
 
@@ -265,74 +286,4 @@ if (savedTheme) {
 
 // Toggle theme on button click
 toggleButton.addEventListener('click', () => {
-    body.classList.toggle('light-mode');
-    const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : '';
-    localStorage.setItem('theme', currentTheme);
-    updateButtonText();
-});
-
-// Update button text based on current theme
-function updateButtonText() {
-    if (body.classList.contains('light-mode')) {
-        toggleButton.textContent = 'Dark Mode';
-    } else {
-        toggleButton.textContent = 'Light Mode';
-    }
-}
-
-// Initial button text
-updateButtonText();
-
-let woData = [];
-
-async function loadLookup(){
-  woData = await fetch("db/tasks.json").then(r=>r.json());
-}
-
-function getWarna(kode){
-  const f = woData.find(a => a.kode == kode);
-  return f ? f.warna : "#1e40af";
-}
-
-async function load(){
-  await loadLookup();
-  const data = await fetch('db/timesheet.json').then(r=>r.json());
-
-  const groups = {};
-  data.forEach(i=>{
-    const d = new Date(i.tanggal);
-    const key = d.getFullYear()+'-'+(d.getMonth()+1);
-    groups[key] = groups[key] || [];
-    groups[key].push(i);
-  });
-
-  const container = document.getElementById('groups');
-  container.innerHTML='';
-
-  for(const k in groups){
-    const parts = k.split('-'); 
-    const y = parts[0], m = parts[1];
-
-    container.innerHTML += `<h3 style="margin-top:25px">${m}/${y}</h3>`;
-
-    groups[k].forEach(it=>{
-      const warna = getWarna(it.kode);
-
-      const card=document.createElement('div'); 
-      card.className='card';
-      card.style.borderLeft = `6px solid ${warna}`;
-
-      card.innerHTML = `
-        <b>${it.tanggal}</b><br>
-        Kode: ${it.kode} | Jam: ${it.jam}<br>
-        ${it.kegiatan}
-      `;
-
-      container.appendChild(card);
-    });
-  }
-}
-</script>
-
-</body>
-</html>
+    body.classList.toggle('

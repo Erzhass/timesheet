@@ -208,6 +208,7 @@ body{
     <a class="nav-item" href="dashboard.php">Dashboard</a>
     <a class="nav-item" href="workorder.php">Work Order</a>
     <a class="nav-item" href="timesheet.php">Timesheet</a>
+    <a class="nav-item" href="assets.php">Assets</a>
 
     <?php if($_SESSION['role']==='admin'){ ?>
         <a class="nav-item" href="add_user.php">Tambah User</a>
