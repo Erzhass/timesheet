@@ -34,6 +34,8 @@ if(!isset($_SESSION['user'])) header('Location: index.php');
     --btn-hover: #D4AF37; /* Darker gold */
     --shadow: rgba(255,215,0,0.3); /* Gold shadow */
     --header-color: #FFD700; /* Gold header */
+    --btn-delete-bg: #FFD700; /* Gold delete */
+    --btn-delete-text: #000000; /* Black text */
 }
 
 /* Light mode overrides */
@@ -56,6 +58,8 @@ body.light-mode {
     --btn-hover: #15348c; /* Darker blue */
     --shadow: rgba(0,0,0,0.08); /* Subtle shadow */
     --header-color: #1e3a8a; /* Blue header */
+    --btn-delete-bg: #e63946; /* Red delete */
+    --btn-delete-text: #ffffff; /* White text */
 }
 
 /* ================= GLOBAL ================= */
@@ -215,6 +219,7 @@ body {
     box-shadow: 0 3px 10px var(--shadow);
     border-left: 8px solid var(--card-border);
     transition: 0.2s, background 0.3s, box-shadow 0.3s;
+    position: relative; /* For delete button positioning */
 }
 
 .ts-card:hover {
@@ -232,6 +237,25 @@ body {
     font-weight: 700;
     margin-bottom: 4px;
     color: var(--text-color);
+}
+
+/* Delete button */
+.btn-delete {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    background: var(--btn-delete-bg);
+    color: var(--btn-delete-text);
+    transition: background 0.3s;
+}
+
+.btn-delete:hover {
+    background: var(--btn-hover);
 }
 </style>
 </head>
@@ -320,7 +344,8 @@ async function load(){
   const data = await fetch('db/timesheet.json').then(r=>r.json());
 
   const groups = {};
-  data.forEach(i=>{
+  data.forEach((i, index) => {
+    i.index = index; // Add index for deletion
     const d = new Date(i.tanggal);
     const key = d.getFullYear()+'-'+(d.getMonth()+1);
     groups[key] = groups[key] || [];
@@ -347,6 +372,7 @@ async function load(){
       card.style.borderLeft = `6px solid ${warna}`;
 
       card.innerHTML = `
+        <button class="btn-delete" onclick="deleteEntry(${it.index})">Hapus</button>
         <div class="ts-color" style="background:${warna}"></div>
         <div class="ts-title">${it.tanggal}</div>
         Kode: ${it.kode} | Jam: ${it.jam}<br>
@@ -357,6 +383,17 @@ async function load(){
     });
 
     container.appendChild(grid);
+  }
+}
+
+async function deleteEntry(index) {
+  if (confirm('Apakah Anda yakin ingin menghapus entry ini?')) {
+    await fetch('api/timesheet.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', index: index })
+    });
+    load(); // Reload history
   }
 }
 
