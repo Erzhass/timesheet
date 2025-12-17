@@ -34,8 +34,9 @@ if(!isset($_SESSION['user'])) header('Location: index.php');
     --btn-hover: #D4AF37; /* Darker gold */
     --shadow: rgba(255,215,0,0.3); /* Gold shadow */
     --header-color: #FFD700; /* Gold header */
-    --btn-delete-bg: #FFD700; /* Gold delete */
-    --btn-delete-text: #000000; /* Black text */
+    --delete-btn-bg: #e63946; /* Red delete button */
+    --delete-btn-text: #ffffff; /* White text */
+    --delete-btn-hover: #d62828; /* Darker red */
 }
 
 /* Light mode overrides */
@@ -58,8 +59,9 @@ body.light-mode {
     --btn-hover: #15348c; /* Darker blue */
     --shadow: rgba(0,0,0,0.08); /* Subtle shadow */
     --header-color: #1e3a8a; /* Blue header */
-    --btn-delete-bg: #e63946; /* Red delete */
-    --btn-delete-text: #ffffff; /* White text */
+    --delete-btn-bg: #e63946; /* Red delete button */
+    --delete-btn-text: #ffffff; /* White text */
+    --delete-btn-hover: #d62828; /* Darker red */
 }
 
 /* ================= GLOBAL ================= */
@@ -164,6 +166,24 @@ body {
     background: var(--btn-hover);
 }
 
+/* Delete button */
+.delete-btn {
+    background: var(--delete-btn-bg);
+    color: var(--delete-btn-text);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.delete-btn:hover {
+    background: var(--delete-btn-hover);
+}
+
 /* Toggle button */
 .theme-toggle{
     background: var(--btn-bg);
@@ -219,7 +239,6 @@ body {
     box-shadow: 0 3px 10px var(--shadow);
     border-left: 8px solid var(--card-border);
     transition: 0.2s, background 0.3s, box-shadow 0.3s;
-    position: relative; /* For delete button positioning */
 }
 
 .ts-card:hover {
@@ -237,25 +256,6 @@ body {
     font-weight: 700;
     margin-bottom: 4px;
     color: var(--text-color);
-}
-
-/* Delete button */
-.btn-delete {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-    padding: 4px 8px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    background: var(--btn-delete-bg);
-    color: var(--btn-delete-text);
-    transition: background 0.3s;
-}
-
-.btn-delete:hover {
-    background: var(--btn-hover);
 }
 </style>
 </head>
@@ -344,8 +344,7 @@ async function load(){
   const data = await fetch('db/timesheet.json').then(r=>r.json());
 
   const groups = {};
-  data.forEach((i, index) => {
-    i.index = index; // Add index for deletion
+  data.forEach(i=>{
     const d = new Date(i.tanggal);
     const key = d.getFullYear()+'-'+(d.getMonth()+1);
     groups[key] = groups[key] || [];
@@ -364,7 +363,7 @@ async function load(){
     const grid = document.createElement('div');
     grid.className = 'ts-grid';
 
-    groups[k].forEach(it=>{
+    groups[k].forEach((it, index)=>{
       const warna = getWarna(it.kode);
 
       const card = document.createElement('div'); 
@@ -372,12 +371,20 @@ async function load(){
       card.style.borderLeft = `6px solid ${warna}`;
 
       card.innerHTML = `
-        <button class="btn-delete" onclick="deleteEntry(${it.index})">Hapus</button>
         <div class="ts-color" style="background:${warna}"></div>
         <div class="ts-title">${it.tanggal}</div>
         Kode: ${it.kode} | Jam: ${it.jam}<br>
         ${it.kegiatan}
+        <button class="delete-btn" data-index="${index}" data-key="${k}">Hapus</button>
       `;
+
+      // Add event listener for delete button
+      const deleteBtn = card.querySelector('.delete-btn');
+      deleteBtn.addEventListener('click', () => {
+        if (confirm('Apakah Anda yakin ingin menghapus entry ini?')) {
+          deleteEntry(k, index, it);
+        }
+      });
 
       grid.appendChild(card);
     });
@@ -386,15 +393,24 @@ async function load(){
   }
 }
 
-async function deleteEntry(index) {
-  if (confirm('Apakah Anda yakin ingin menghapus entry ini?')) {
-    await fetch('api/timesheet.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'delete', index: index })
-    });
-    load(); // Reload history
-  }
+async function deleteEntry(key, index, entry) {
+  // Send delete request to API
+  const body = {
+    action: 'delete',
+    tanggal: entry.tanggal,
+    kode: entry.kode,
+    jam: entry.jam,
+    kegiatan: entry.kegiatan
+  };
+
+  await fetch('api/timesheet.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  // Reload history
+  load();
 }
 
 // Handle form submit for preview
