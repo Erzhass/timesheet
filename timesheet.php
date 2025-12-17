@@ -343,8 +343,14 @@ async function load(){
   await loadLookup();
   const data = await fetch('db/timesheet.json').then(r=>r.json());
 
+  // Filter out entries with invalid dates
+  const validData = data.filter(i => {
+    const d = new Date(i.tanggal);
+    return !isNaN(d.getTime());
+  });
+
   const groups = {};
-  data.forEach(i=>{
+  validData.forEach(i=>{
     const d = new Date(i.tanggal);
     const key = d.getFullYear()+'-'+(d.getMonth()+1);
     groups[key] = groups[key] || [];
