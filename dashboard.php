@@ -30,6 +30,10 @@ if(!isset($_SESSION['user'])) header('Location: index.php');
     --btn-text: #000000; /* Black text */
     --btn-hover: #D4AF37; /* Darker gold */
     --shadow: rgba(255,215,0,0.3); /* Gold shadow */
+    --header-color: #FFD700; /* Gold header */
+    --delete-btn-bg: #e63946; /* Red delete button */
+    --delete-btn-text: #ffffff; /* White text */
+    --delete-btn-hover: #d62828; /* Darker red */
 }
 
 /* Light mode overrides */
@@ -50,6 +54,10 @@ body.light-mode {
     --btn-text: #ffffff; /* White text */
     --btn-hover: #15348c; /* Darker blue */
     --shadow: rgba(0,0,0,0.08); /* Subtle shadow */
+    --header-color: #1e3a8a; /* Blue header */
+    --delete-btn-bg: #e63946; /* Red delete button */
+    --delete-btn-text: #ffffff; /* White text */
+    --delete-btn-hover: #d62828; /* Darker red */
 }
 
 /* ================= GLOBAL ================= */
@@ -172,6 +180,7 @@ body{
     text-align:center;
     border: 2px solid var(--card-border);
     transition: background 0.3s, box-shadow 0.3s;
+    margin-bottom: 30px;
 }
 
 .photo-box{
@@ -194,6 +203,59 @@ body{
     font-weight:600;
     color: var(--text-color);
     line-height:1.4;
+}
+
+/* ================= TIMESHEET SUMMARY ================= */
+.summary-section {
+    margin-top: 30px;
+}
+
+.summary-section h2 {
+    color: var(--header-color);
+    margin-bottom: 20px;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.summary-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 10px var(--shadow);
+    border: 2px solid var(--card-border);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.summary-card h3 {
+    margin: 0 0 10px 0;
+    color: var(--text-color);
+}
+
+.summary-card p {
+    margin: 5px 0;
+    color: var(--text-color);
+}
+
+/* Delete button for summary */
+.delete-btn {
+    background: var(--delete-btn-bg);
+    color: var(--delete-btn-text);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.delete-btn:hover {
+    background: var(--delete-btn-hover);
 }
 </style>
 
@@ -241,6 +303,12 @@ body{
         </h3>
     </div>
 
+    <!-- TIMESHEET SUMMARY -->
+    <div class="summary-section">
+        <h2>Ringkasan Timesheet</h2>
+        <div id="summary-container" class="summary-grid"></div>
+    </div>
+
 </div>
 
 <script>
@@ -274,6 +342,93 @@ function updateButtonText() {
 
 // Initial button text
 updateButtonText();
+
+let woData = [];
+
+async function loadLookup(){
+  woData = await fetch("db/tasks.json").then(r=>r.json());
+}
+
+function getWarna(kode){
+  const f = woData.find(a => a.kode == kode);
+  return f ? f.warna : "#1e40af";
+}
+
+async function loadSummary(){
+  await loadLookup();
+  const data = await fetch('db/timesheet.json').then(r=>r.json());
+
+  // Filter out entries with invalid dates
+  const validData = data.filter(i => {
+    const d = new Date(i.tanggal);
+    return !isNaN(d.getTime());
+  });
+
+  const container = document.getElementById('summary-container');
+  container.innerHTML = '';
+
+  // Group by month and calculate totals
+  const monthlyTotals = {};
+  validData.forEach(i => {
+    const d = new Date(i.tanggal);
+    const key = d.getFullYear() + '-' + (d.getMonth() + 1);
+    if (!monthlyTotals[key]) {
+      monthlyTotals[key] = { totalJam: 0, entries: [] };
+    }
+    monthlyTotals[key].totalJam += i.jam;
+    monthlyTotals[key].entries.push(i);
+  });
+
+  for (const key in monthlyTotals) {
+    const parts = key.split('-');
+    const y = parts[0], m = parts[1];
+    const totalJam = monthlyTotals[key].totalJam;
+    const entryCount = monthlyTotals[key].entries.length;
+
+    const card = document.createElement('div');
+    card.className = 'summary-card';
+    card.innerHTML = `
+      <h3>Bulan ${m}/${y}</h3>
+      <p>Total Jam: ${totalJam}</p>
+      <p>Jumlah Entry: ${entryCount}</p>
+      <button class="delete-btn" data-key="${key}">Hapus Semua Entry Bulan Ini</button>
+    `;
+
+    // Add event listener for delete button
+    const deleteBtn = card.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => {
+      if (confirm(`Apakah Anda yakin ingin menghapus semua entry untuk bulan ${m}/${y}?`)) {
+        deleteMonthEntries(key, monthlyTotals[key].entries);
+      }
+    });
+
+    container.appendChild(card);
+  }
+}
+
+async function deleteMonthEntries(key, entries) {
+  // Send delete requests for each entry
+  for (const entry of entries) {
+    const body = {
+      action: 'delete',
+      tanggal: entry.tanggal,
+      kode: entry.kode,
+      jam: entry.jam,
+      kegiatan: entry.kegiatan
+    };
+
+    await fetch('api/timesheet.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  }
+
+  // Reload summary
+  loadSummary();
+}
+
+loadSummary();
 </script>
 
 </body>
