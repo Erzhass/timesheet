@@ -388,7 +388,7 @@ async function load(){
       const deleteBtn = card.querySelector('.delete-btn');
       deleteBtn.addEventListener('click', () => {
         if (confirm('Apakah Anda yakin ingin menghapus entry ini?')) {
-          deleteEntry(k, index, it);
+          deleteEntry(card, it);
         }
       });
 
@@ -399,7 +399,7 @@ async function load(){
   }
 }
 
-async function deleteEntry(key, index, entry) {
+async function deleteEntry(cardElement, entry) {
   // Send delete request to API
   const body = {
     action: 'delete',
@@ -415,8 +415,8 @@ async function deleteEntry(key, index, entry) {
     body: JSON.stringify(body)
   });
 
-  // Reload history
-  load();
+  // Remove the card from DOM
+  cardElement.remove();
 }
 
 // Handle form submit for preview
